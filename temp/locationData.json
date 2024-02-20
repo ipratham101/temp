@@ -1,0 +1,24 @@
+[
+  {
+    "latitude": 28.5373648,
+    "longitude": 77.3659477,
+    "altitude": null,
+    "accuracy": 19.552,
+    "altitudeAccuracy": null,
+    "heading": null,
+    "speed": null,
+    "timestamp": 1708463502247,
+    "enrollment": "9921103104"
+  },
+  {
+    "latitude": 28.5373298,
+    "longitude": 77.365963,
+    "altitude": null,
+    "accuracy": 36.9,
+    "altitudeAccuracy": null,
+    "heading": null,
+    "speed": null,
+    "timestamp": 1708463512262,
+    "enrollment": "9921103102"
+  }
+]
