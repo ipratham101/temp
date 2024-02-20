@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Real-Time Data Example</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+    <h1>Real-Time Data Example</h1>
+    <button onclick="generateAndSendRandomNumber()">Generate Random Number</button>
+    <p id="random-number"></p>
+    <script>
+        function generateAndSendRandomNumber() {
+            // Generate a random number
+            const randomNumber = Math.floor(Math.random() * 1000);
+
+            // Display the random number on the HTML page
+            document.getElementById('random-number').innerText = `Random Number: ${randomNumber}`;
+
+            // Now, you can send this number to the backend using an HTTP request
+            sendRandomNumberToBackend(randomNumber);
+        }
+        function sendRandomNumberToBackend(randomNumber) {
+            // Use fetch or another method to send the random number to the backend
+            fetch('/api/random', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ randomNumber }),
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Failed to send random number to the backend');
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log('Response from backend:', data);
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        }
+    </script>
+    <table>
+        <thead>
+            <tr>
+                <th>Enrollment Number</th>
+                <th>Latitude</th>
+            </tr>
+        </thead>
+        <tbody id="data-table-body"></tbody>
+    </table>
+
+    <script>
+        const fetchData = async () => {
+            try {
+                const response = await fetch('/api/realtime-data');
+                const data = await response.json();
+
+                // Clear the existing table body
+                const tableBody = document.getElementById('data-table-body');
+                tableBody.innerHTML = '';
+
+                // Create a new row for each entry in the data
+                data.forEach(entry => {
+                    const row = document.createElement('tr');
+                    const enrollmentCell = document.createElement('td');
+                    enrollmentCell.textContent = entry.enrollment;
+                    const latitudeCell = document.createElement('td');
+                    latitudeCell.textContent = entry.latitude;
+
+                    // Append cells to the row
+                    row.appendChild(enrollmentCell);
+                    row.appendChild(latitudeCell);
+
+                    // Append the row to the table body
+                    tableBody.appendChild(row);
+                });
+            } catch (error) {
+                console.error('Error fetching real-time data:', error);
+            }
+        };
+
+        // Fetch and display real-time data on page load
+        const initialFetch = async () => {
+            fetchData();
+        };
+
+        initialFetch();
+
+        // Optionally, you can set up a periodic refresh
+        setInterval(fetchData, 5000); // Refresh every 5 seconds
+    </script>
+</body>
+</html>
